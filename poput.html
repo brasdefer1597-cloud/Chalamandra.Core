@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chalamandra Core</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="neural-container">
+    <!-- Header Section -->
+    <header class="analysis-header">
+      <div class="logo-section">
+        <h1>🦎 Chalamandra</h1>
+        <p class="tagline">Context Intelligence Engine</p>
+      </div>
+      <div class="status-indicator">
+        <div class="pulse-dot" id="statusDot"></div>
+        <span id="statusText">Ready</span>
+      </div>
+    </header>
+
+    <!-- Analysis Controls -->
+    <section class="controls-section">
+      <button id="analyzeBtn" class="primary-btn">
+        <span class="btn-icon">🧠</span>
+        Analyze Current Page
+      </button>
+      <div class="mode-selector">
+        <label class="mode-option">
+          <input type="radio" name="analysisMode" value="comprehensive" checked>
+          <span>Comprehensive Analysis</span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="analysisMode" value="strategic">
+          <span>Strategic Focus</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Results Display -->
+    <section class="results-section" id="resultsSection">
+      <div class="resonance-meter">
+        <div class="meter-fill" id="resonanceFill"></div>
+        <div class="meter-text">
+          <span id="resonanceValue">0%</span>
+          <span id="resonanceLabel">Context Match</span>
+        </div>
+      </div>
+
+      <div class="insights-grid" id="insightsGrid">
+        <!-- Insights will be populated here -->
+      </div>
+
+      <div class="action-buttons">
+        <button id="copyInsights" class="secondary-btn">Copy Insights</button>
+        <button id="exportAnalysis" class="secondary-btn">Export</button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="analysis-footer">
+      <div class="api-badge">
+        <span>Powered by Chrome Built-in AI</span>
+      </div>
+      <div class="privacy-note">
+        <small>100% Local Processing • No Data Sent to Servers</small>
+      </div>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
