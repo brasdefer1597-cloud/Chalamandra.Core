@@ -1,0 +1,513 @@
+<!DOCTYPE html>  
+<html lang="es">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>El Nacimiento de la Salamandra</title>  
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">  
+    <style>  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+        }  
+          
+        body {  
+            background: linear-gradient(135deg, #0a0010, #1a0020);  
+            color: #fdfdfd;  
+            font-family: 'Open Sans', sans-serif;  
+            min-height: 100vh;  
+            overflow: hidden;  
+            position: relative;  
+        }  
+          
+        /* Estructura principal */  
+        .container {  
+            max-width: 1200px;  
+            margin: 0 auto;  
+            padding: 2rem;  
+            position: relative;  
+            z-index: 10;  
+            height: 100vh;  
+            display: flex;  
+            flex-direction: column;  
+        }  
+          
+        /* Secciones */  
+        .section {  
+            position: absolute;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            display: flex;  
+            flex-direction: column;  
+            justify-content: center;  
+            align-items: center;  
+            opacity: 0;  
+            transition: opacity 1.5s ease-in-out;  
+            z-index: 1;  
+            pointer-events: none;  
+        }  
+          
+        .section.active {  
+            opacity: 1;  
+            pointer-events: all;  
+            z-index: 2;  
+        }  
+          
+        /* Opening - Rojo Fuego */  
+        #opening {  
+            background: radial-gradient(circle at center, #50001a 0%, #0a0010 70%);  
+        }  
+          
+        /* Problema - Azules/Grises */  
+        #problem {  
+            background: radial-gradient(circle at center, #003050 0%, #001020 70%);  
+        }  
+          
+        /* Transformación - Verde/Turquesa */  
+        #transformation {  
+            background: radial-gradient(circle at center, #00382a 0%, #001010 70%);  
+        }  
+          
+        /* Impacto - Verde suave + blanco */  
+        #impact {  
+            background: radial-gradient(circle at center, #013d30 0%, #001010 70%);  
+        }  
+          
+        /* Cierre - Blanco + Glow */  
+        #closure {  
+            background: radial-gradient(circle at center, #001010 0%, #000 70%);  
+        }  
+          
+        /* Títulos */  
+        h1, h2, h3 {  
+            font-family: 'Montserrat', sans-serif;  
+            text-transform: uppercase;  
+            text-align: center;  
+        }  
+          
+        h1 {  
+            font-size: 4.5rem;  
+            margin-bottom: 2rem;  
+            letter-spacing: -1px;  
+        }  
+          
+        /* Elementos de fuego */  
+        .fire {  
+            position: absolute;  
+            width: 100%;  
+            height: 100%;  
+            top: 0;  
+            left: 0;  
+            z-index: -1;  
+            opacity: 0.7;  
+        }  
+          
+        /* Salamandra */  
+        .salamander {  
+            position: absolute;  
+            relative: 0;  
+            width: 300px;  
+            height: 200px;  
+            z-index: 5;  
+        }  
+          
+        /* Logo */  
+        .logo {  
+            width: 200px;  
+            height: 200px;  
+            position: relative;  
+            margin: 2rem auto;  
+        }  
+          
+        /* Elementos HUD */  
+        .hud {  
+            position: absolute;  
+            top: 20px;  
+            left: 20px;  
+            right: 20px;  
+            bottom: 20px;  
+            border: 1px solid rgba(255, 255, 255, 0.1);  
+            border-radius: 10px;  
+            pointer-events: none;  
+        }  
+          
+        .hud-element {  
+            position: absolute;  
+            background: rgba(0, 0, 0, 0.5);  
+            border: 1px solid rgba(255, 255, 255, 0.1);  
+            border-radius: 5px;  
+            padding: 10px;  
+            font-size: 0.9rem;  
+            backdrop-filter: blur(5px);  
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  
+        }  
+          
+        /* Estadísticas */  
+        .stats {  
+            display: grid;  
+            grid-template-columns: repeat(3, 1fr);  
+            gap: 1.5rem;  
+            margin: 2rem 0;  
+            max-width: 800px;  
+        }  
+          
+        .stat-card {  
+            background: rgba(0, 0, 0, 0.4);  
+            border-radius: 10px;  
+            padding: 1.5rem;  
+            text-align: center;  
+            backdrop-filter: blur(5px);  
+            border: 1px solid;  
+        }  
+          
+        /* Transiciones con huella de salamandra */  
+        .transition {  
+            position: absolute;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            z-index: 20;  
+            pointer-events: none;  
+            opacity: 0;  
+        }  
+          
+        /* Botones de navegación */  
+        .nav-controls {  
+            position: absolute;  
+            bottom: 30px;  
+            left: 0;  
+            right: 0;  
+            display: flex;  
+            justify-content: center;  
+            gap: 1rem;  
+            z-index: 30;  
+        }  
+          
+        .nav-btn {  
+            background: rgba(255, 255, 255, 0.1);  
+            border: 2px solid rgba(255, 255, 255, 0.3);  
+            color: white;  
+            padding: 0.8rem 1.5rem;  
+            border-radius: 30px;  
+            cursor: pointer;  
+            font-family: backdrop-filter: blur(5px);  
+            transition: all 0.3s ease;  
+            font-weight: 600;  
+            letter-spacing: 1px;  
+        }  
+          
+        .nav-btn:hover {  
+            background: rgba(255, 255, 255, 0.2);  
+            transform: translateY(-3px);  
+        }  
+          
+        /* CTA */  
+        .cta {  
+            background: linear-gradient(45deg, #39FF14, #00FFEA);  
+            color: #000;  
+            padding: 1rem 2.5rem;  
+            border: none;  
+            border-radius: 30px;  
+            font-family: 'Montserrat', sans-serif;  
+            font-weight: 800;  
+            font-size: 1.2rem;  
+            cursor: pointer;  
+            margin-top: 2rem;  
+            position: relative;  
+            overflow: hidden;  
+            transition: all 0.3s ease;  
+        }  
+          
+        .cta:hover {  
+            transform: scale(1.05);  
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.7);  
+        }  
+          
+        /* Partículas */  
+        #particles {  
+            position: absolute;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            pointer-events: none;  
+            z-index: -1;  
+        }  
+          
+        /* Animaciones clave */  
+        @keyframes morph {  
+            0% { transform: scale(0.2) rotate(0deg); opacity: 0; }  
+            50% { transform: scale(1) rotate(180deg); opacity: 1; }  
+            100% { transform: scale(0.8) rotate(360deg); opacity: 0.8; }  
+        }  
+          
+        @keyframes glow {  
+            0% { text-shadow: 0 0 5px #FF003C, 0 0 10px #FF003C; }  
+            50% { text-shadow: 0 0 15px #FF6600, 0 0 25px #FF6600; }  
+            100% { text-shadow: 0 0 5px #39FF14, 0 0 10px #39FF14; }  
+        }  
+          
+        @keyframes fire {  
+            0% { background-position: 0% 50%; }  
+            50% { background-position: 100% 50%; }  
+            100% { background-position: 0% 50%; }  
+        }  
+          
+        .glowing {  
+            animation: glow 3s infinite alternate;  
+        }  
+          
+        /* Elementos específicos por sección */  
+        #opening h1 {  
+            color: #FF003C;  
+            text-shadow: 0 0 15px rgba(255, 0, 60, 0.7);  
+        }  
+          
+        #problem h1 {  
+            color: #00aaff;  
+        }  
+          
+        #transformation h1 {  
+            color: #39FF14;  
+        }  
+          
+        #impact h1 {  
+            color: #00FFEA;  
+        }  
+          
+        #closure h1 {  
+            color: #ffffff;  
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);  
+        }  
+          
+        .salamander-path {  
+            stroke: #39FF14;  
+            stroke-width: 2;  
+            fill: none;  
+            stroke-dasharray: 1000;  
+            stroke-dashoffset: 1000;  
+            animation: dash 10s linear forwards;  
+        }  
+          
+        @keyframes dash {  
+            to {  
+                stroke-dashoffset: 0;  
+            }  
+        }  
+          
+        /* Responsive */  
+        @media (max-width: 768px) {  
+            h1 {  
+                font-size: 2.5rem;  
+            }  
+              
+            .stats {  
+                grid-template-columns: 1fr;  
+            }  
+        }  
+    </style>  
+</head>  
+<body>  
+    <!-- Partículas para efectos especiales -->  
+    <canvas id="particles"></canvas>  
+      
+    <!-- Secciones del moodboard -->  
+    <div class="section active" id="opening">  
+        <div class="fire"></div>  
+        <h1 class="glowing">El Caos Digital</h1>  
+        <p style="font-size: 1.2rem; max-width: 600px; text-align: center; margin-bottom: 2rem;">  
+            Sobrecarga de datos, decisiones sin rumbo, oportunidades perdidas en un mar de información  
+        </p>  
+        <div class="hud">  
+            <div class="hud-element" style="top: 30px; left: 30px;">Datos: 12.7TB</div>  
+            <div class="hud-element" style="top: 30px; right: 30px;">CPU: 98%</div>  
+            <div class="hud-element" style="bottom: 30px; left: 30px;">Tiempo: 0:00:00</div>  
+            <div class="hud-element" style="bottom: 30px; right: 30px;">Errores: 142</div>  
+        </div>  
+    </div>  
+      
+    <div class="section" id="problem">  
+        <h1>El Problema</h1>  
+        <p style="font-size: 1.2rem; max-width: 600px; text-align: center; margin-bottom: 2rem;">  
+            La complejidad de los datos paraliza la toma de decisiones estratégicas  
+        </p>  
+        <div class="stats">  
+            <div class="stat-card" style="border-color: #FF003C;">  
+                <h3>78%</h3>  
+                <p>de empresas reportan sobrecarga de información</p>  
+            </div>  
+            <div class="stat-card" style="border-color: #FF6600;">  
+                <h3>42 horas</h3>  
+                <p>promedio perdidas por empleado cada semana</p>  
+            </div>  
+            <div class="stat-card" style="border-color: #00aaff;">  
+                <h3>$3.1T</h3>  
+                <p>pérdidas anuales por decisiones ineficientes</p>  
+            </div>  
+        </div>  
+    </div>  
+      
+    <div class="section" id="transformation">  
+        <div class="salamander">  
+            <svg viewBox="0 0 300 200">  
+                <path class="dashed-line" d="M30,100 Q150,30 270,100" stroke="#39FF14" stroke-width="2" fill="none" stroke-dasharray="5,5" />  
+                <path class="salamander-path" d="M30,100 C100,50 200,50 270,100" />  
+            </svg>  
+        </div>  
+        <h1>Transformación</h1>  
+        <p style="font-size: 1.2rem; max-width: 600px; text-align: center; margin-bottom: 2rem;">  
+            Del fuego del caos emerge la claridad: Inteligencia estratégica simplificada  
+        </p>  
+    </div>  
+      
+    <div class="section" id="impact">  
+        <h1>Impacto Estratégico</h1>  
+        <div class="stats">  
+            <div class="stat-card" style="border-color: #39FF14;">  
+                <h3>+350%</h3>  
+                <p>Aumento en velocidad de decisiones</p>  
+            </div            ><div class="stat-card" style="border-color: #00FFEA;">  
+                <h3>92%</h3>  
+                <p>Reducción en errores estratégicos</p>  
+            </div>  
+            <div class="stat-card" style="border-color: #39FF14;">  
+                <h3>+$12M</h3>  
+                <p>ROI promedio por implementación</p>  
+            </div>  
+        </div>  
+    </div>  
+      
+    <div class="section" id="closure">  
+        <div class="logo">  
+            <svg viewBox="0 0 200 200">  
+                <path d="M100,30 Q140,50 170,70 Q190,100 170,130 Q140,150 100,170 Q60,150 30,130 Q10,100 30,70 Q60,50 100,30 Z" fill="none" stroke="#00FFEA" stroke-width="3" />  
+                <path d="M100,50 C120,60 150,70 160,100 C150,130 120,140 100,150 C80,140 50,130 40,100 C50,70 80,60 100,50 Z" fill="#39FF14" opacity="0.3" />  
+                <circle cx="100" cy="100" r="15" fill="#00FFEA" filter="url(#glow)" />  
+            </svg>  
+            <filter id="glow">  
+                <feGaussianBlur stdDeviation="3.5" result="blur" />  
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8" />  
+            </filter>  
+        </div>  
+        <h1>El Futuro es Ahora</h1>  
+        <p style="font-size: 1.2rem; max-width: 600px; text-align: center; margin-bottom: 2rem;">  
+            Únete a la revolución de la inteligencia estratégica  
+        </p>  
+        <button class="cta">INICIAR TRANSFORMACIÓN</button>  
+    </div>  
+      
+    <!-- Controles de navegación -->  
+    <div class="nav-controls">  
+        <button class="nav-btn" onclick="showSection('opening')">OPENING</button>  
+        <button class="nav-btn" onclick="showSection('problem')">PROBLEMA</button>  
+        <button class="nav-btn" onclick="showSection('transformation')">TRANSFORMACIÓN</button>  
+        <button class="nav-btn" onclick="showSection('impact')">IMPACTO</button>  
+        <button class="nav-btn" onclick="showSection('closure')">CIERRE</button>  
+    </div>  
+      
+    <script>  
+        // Sistema de partículas  
+        const canvas = document.getElementById('particles');  
+        const ctx = canvas.getContext('2d');  
+        canvas.width = window.innerWidth;  
+        canvas.height = window.innerHeight;  
+          
+        const particles = [];  
+        const particleCount = 150;  
+          
+        class Particle {  
+            constructor() {  
+                this.x = Math.random() * canvas.width;  
+                this.y = Math.random() * canvas.height;  
+                this.size = Math.random() * 3 + 1;  
+               1.5  
+                this.speedX = Math.random() * 3 - 1.5;  
+                this.speedY = Math.random() * 3 - 1.5;  
+                this.color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 100 + 155)}, 0.8)`;  
+            }  
+              
+            update() {  
+                this.x += this.speedX;  
+                this.y += this.speedY;  
+                  
+                if (this.x > canvas.width || this.x < 0) {  
+                    this.speedX = -this.speedX;  
+                }  
+                if (this.y > canvas.height || this.y < 0)0 {  
+                    this.speedY = -this.speedY;  
+                }  
+            }  
+              
+            draw() {  
+                ctx.fillStyle = this.color;  
+                ctx.beginPath();  
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);  
+                ctx.fill();  
+                  
+                // Glow effect  
+                ctx.shadowColor = this.color;  
+                ctx.shadowBlur = 15;  
+            }  
+        }  
+          
+        function createParticles() {  
+            for (let i = 0; i < particleCount; i++) {  
+                particles.push(new Particle());  
+            }  
+        }  
+          
+        function animateParticles() {  
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  
+              
+            for (let i = 0; i < particles.length; i++) {  
+                particles[i].update();  
+                particles[i].draw();  
+            }  
+              
+            requestAnimationFrame(animateParticles);  
+        }  
+          
+        createParticles();  
+        animateParticles();  
+          
+        // Sistema de navegación  
+        function showSection(sectionId) {  
+            document.querySelectorAll('.section').forEach(section => {  
+                section.classList.remove('active');  
+            });  
+            document.getElementById(sectionId).classList.add('active');  
+              
+            // Efecto especial para la transformación  
+            if (sectionId === 'transformation') {  
+                const path = document.querySelector('.salamander-path');  
+                path.style.animation = 'none';  
+                setTimeout(() => {  
+                    path.style.animation = 'dash 10s linear forwards';  
+                }, 10);  
+            }  
+        }  
+          
+        // Cambio automático de secciones  
+        let currentSection = 0;  
+        const sections = ['opening', 'problem', 'transformation', 'impact', 'closure'];  
+          
+        function autoNavigate() {  
+            showSection(sections[currentSection]);  
+            currentSection = (currentSection + 1) % sections.length;  
+        }  
+          
+        // Cambia de sección cada 8 segundos  
+        setInterval(autoNavigate, 8000);  
+          
+        // Ajustar canvas al tamaño de la ventana  
+        window.addEventListener('resize', () => {  
+            canvas.width = window.innerWidth;  
+            canvas.height = window.innerHeight;  
+        });  
+    </script>  
+</body>  
+</html>
